@@ -1,10 +1,11 @@
 import { useContext, useEffect, useState } from "react";
-import logo from '../assets/image/logo.png'
+import logo from "../assets/image/logo.png";
 import { AuthContext } from "../provider/AuthProvider";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
-    const {user} = useContext(AuthContext)
+  const { user, logOut } = useContext(AuthContext);
   const [theme, setTheme] = useState("dark");
 
   useEffect(() => {
@@ -20,10 +21,17 @@ const Navbar = () => {
       setTheme("dark");
     }
   };
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {
+        toast.success("Logout Successful");
+      })
+      .catch((err) => toast.error(err?.message));
+  };
   return (
     <div className="navbar bg-base-100 shadow-sm container px-4 mx-auto">
       <div className="flex-1">
-        <Link to='/' className="flex gap-2 items-center">
+        <Link to="/" className="flex gap-2 items-center">
           <img className="w-auto h-7" src={logo} alt="" />
           <span className="font-bold">SoloSphere</span>
         </Link>
@@ -31,12 +39,12 @@ const Navbar = () => {
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <Link to='/'>Home</Link>
+            <Link to="/">Home</Link>
           </li>
 
           {!user && (
             <li>
-              <Link to='/login'>Login</Link>
+              <Link to="/login">Login</Link>
             </li>
           )}
         </ul>
@@ -73,7 +81,10 @@ const Navbar = () => {
                 <div>Bid Requests</div>
               </li>
               <li className="mt-2">
-                <button className="bg-gray-200 block text-center">
+                <button
+                  onClick={handleLogOut}
+                  className="bg-gray-200 block text-center"
+                >
                   Logout
                 </button>
               </li>

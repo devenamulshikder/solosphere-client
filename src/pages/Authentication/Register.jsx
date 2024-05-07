@@ -1,24 +1,47 @@
-import { Link } from "react-router-dom";
+/* eslint-disable no-unused-vars */
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/image/logo.png";
+import { useContext } from "react";
+import { AuthContext } from "../../provider/AuthProvider";
+import toast from "react-hot-toast";
 
 const Register = () => {
+  const navigate = useNavigate();
+  const {
+    user,
+    setUser,
+    loading,
+    setLoading,
+    createUser,
+    signInWithGoogle,
+    updateUserProfile,
+  } = useContext(AuthContext);
+
+   const handleGoogleLogin = async () => {
+     try {
+       await signInWithGoogle();
+       toast.success("Signin Successful");
+       navigate("/");
+     } catch (err) {
+       toast.error(err?.message);
+     }
+   };
   return (
     <div className="flex justify-center items-center min-h-[calc(100vh-306px)] my-12">
       <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg  lg:max-w-4xl ">
         <div className="w-full px-6 py-8 md:px-8 lg:w-1/2">
           <div className="flex justify-center mx-auto">
-            <img
-              className="w-auto h-7 sm:h-8"
-              src={logo}
-              alt=""
-            />
+            <img className="w-auto h-7 sm:h-8" src={logo} alt="" />
           </div>
 
           <p className="mt-3 text-xl text-center text-gray-600 ">
             Get Your Free Account Now.
           </p>
 
-          <div className="flex cursor-pointer items-center justify-center mt-4 text-gray-600 transition-colors duration-300 transform border rounded-lg   hover:bg-gray-50 ">
+          <div
+            onClick={handleGoogleLogin}
+            className="flex cursor-pointer items-center justify-center mt-4 text-gray-600 transition-colors duration-300 transform border rounded-lg   hover:bg-gray-50 "
+          >
             <div className="px-4 py-2">
               <svg className="w-6 h-6" viewBox="0 0 40 40">
                 <path
